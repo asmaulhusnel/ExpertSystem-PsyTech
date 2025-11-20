@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useState } from "react";
 import kbSource from "./data/knowledge.json";
 
 const clone = (v) => JSON.parse(JSON.stringify(v));
@@ -15,9 +14,7 @@ function forwardChaining(initialFacts, rules) {
     changed = false;
     for (const rule of rules) {
       if (fired.has(rule.id)) continue;
-
       const allMatch = rule.if.every((prem) => facts.has(prem));
-
       if (allMatch) {
         const conclusionId = rule.then.id;
         if (!facts.has(conclusionId)) {
@@ -108,18 +105,14 @@ export default function App() {
       return alert("Pilih minimal satu premis.");
     if (!newRuleConclusionText.trim())
       return alert("Masukkan teks kesimpulan.");
-
-    const rid =
-      "r" + (kb.rules.length + 1 + Math.floor(Math.random() * 1000));
+    const rid = "r" + (kb.rules.length + 1 + Math.floor(Math.random() * 1000));
     const diagId = "d_" + rid;
-
     const rule = {
       id: rid,
       if: newRulePremises.slice(),
       then: { id: diagId, text: newRuleConclusionText.trim() },
       confidence: Number(newRuleConfidence) || 0.7,
     };
-
     setKb((k) => ({ ...k, rules: [...k.rules, rule] }));
     setNewRulePremises([]);
     setNewRuleConclusionText("");
@@ -137,219 +130,100 @@ export default function App() {
   kb.symptoms.forEach((s) => (symptomMap[s.id] = s.text));
 
   return (
-    <div className="min-h-screen bg-dynamic">
-      <div className="background-overlay"></div>
+    <div
+      className="min-h-screen relative bg-cover bg-center"
+      style={{ backgroundImage: "url('/bg-psytech.jpg')" }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-0"></div>
 
-      <div className="min-h-screen flex items-center justify-center p-6 relative z-10">
-        <div className="max-w-5xl w-full grid md:grid-cols-2 gap-6">
-          
-          {/* LEFT SIDE */}
-          <div className="card p-6 rounded-2xl bg-white/80 shadow-lg backdrop-blur">
-            <h1 className="text-2xl font-bold mb-2">
-              PsyTech — Diagnosa Psikologis
-            </h1>
-            <p className="text-sm text-gray-700 mb-4">
-              Pilih gejala kemudian jalankan inferensi.
-            </p>
-
-            <div>
-              <h3 className="font-semibold mb-2">Pilih Gejala</h3>
-              <div className="space-y-2 max-h-56 overflow-auto pr-2">
-                {kb.symptoms.map((s) => (
-                  <label key={s.id} className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
-                      checked={selectedSymptoms.includes(s.id)}
-                      onChange={() => toggleSymptom(s.id)}
-                    />
-                    <span>{s.text}</span>
-                  </label>
-                ))}
-              </div>
-
-              <div className="flex gap-2 mt-4">
-                <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={runInference}>
-                  Diagnosa
-                </button>
-                <button className="px-4 py-2 border rounded" onClick={reset}>
-                  Reset
-                </button>
-              </div>
-
-              {/* RESULT */}
-              <div className="mt-4">
-                <h4 className="font-semibold">Hasil</h4>
-
-                {!result && (
-                  <p className="text-sm text-gray-600">
-                    Belum ada hasil. Klik Diagnosa.
-                  </p>
-                )}
-
-                {result && (
-                  <div className="space-y-3 mt-2">
-                    <div>
-                      <strong>Fakta akhir:</strong>
-                      <div className="text-sm">
-                        {result.facts.map((f) => (
-                          <div key={f}>{symptomMap[f] || f}</div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <strong>Diagnosa:</strong>
-                      <ul className="list-disc pl-5">
-                        {result.diagnoses.length === 0 && (
-                          <li>Tidak ada diagnosis otomatis.</li>
-                        )}
-                        {result.diagnoses.map((d) => (
-                          <li key={d.ruleId}>
-                            <strong>{d.diagnosisText}</strong> — confidence:{" "}
-                            {Math.round(d.confidence * 100)}%
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div>
-                      <strong>Trace:</strong>
-                      <div className="max-h-36 overflow-auto text-xs bg-gray-50 p-2 rounded mt-1">
-                        {result.trace.map((t, i) => (
-                          <div key={i} className="mb-2">
-                            <div>
-                              Rule: <code>{t.ruleId}</code> — fired:{" "}
-                              {String(!!t.fired)}
-                            </div>
-                            <div>
-                              Matched:{" "}
-                              {t.matched
-                                ? t.matched
-                                    .map((m) => symptomMap[m] || m)
-                                    .join(", ")
-                                : "-"}
-                            </div>
-                            {t.conclusion && (
-                              <div>
-                                Then: {t.conclusion.text} (id:{" "}
-                                {t.conclusion.id})
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+      {/* Navbar */}
+      <nav className="fixed top-0 w-full z-20 backdrop-blur-md bg-white/10 border-b border-white/20">
+        <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center text-white">
+          <div className="text-xl font-bold tracking-wide">PsyTech</div>
+          <div className="flex space-x-6 text-sm">
+            <a href="#" className="hover:text-blue-300 transition">Beranda</a>
+            <a href="#konsultasi" className="hover:text-blue-300 transition">Konsultasi</a>
+            <a href="#" className="hover:text-blue-300 transition">Tentang</a>
           </div>
+        </div>
+      </nav>
 
-          {/* RIGHT SIDE — KB EDITOR */}
-          <div className="card p-6 rounded-2xl bg-white/80 shadow-lg backdrop-blur">
-            <h3 className="text-lg font-semibold mb-2">Knowledge Base Editor</h3>
-            <p className="text-sm text-gray-700 mb-4">
-              Tambah gejala dan rule (tidak permanen, hanya memory).
-            </p>
+      <div className="pt-24 max-w-6xl mx-auto px-6 relative z-10 text-white">
+        <h1 className="text-4xl font-bold text-center mb-6">Diagnosa Psikologis Mahasiswa</h1>
 
-            {/* Add Symptom */}
-            <div className="mb-4">
-              <h4 className="font-medium">Tambah Gejala</h4>
-              <form onSubmit={addSymptom} className="flex gap-2 mt-2">
-                <input
-                  value={newSymptomText}
-                  onChange={(e) => setNewSymptomText(e.target.value)}
-                  placeholder="Contoh: sering cemas..."
-                  className="flex-1 p-2 border rounded"
-                />
-                <button className="px-3 bg-green-600 text-white rounded">
-                  Tambah
-                </button>
-              </form>
-            </div>
-
-            {/* Add Rule */}
-            <div className="mb-4">
-              <h4 className="font-medium">Tambah Rule</h4>
-
-              <div className="text-sm text-gray-600">
-                Pilih premis (gejala):
-              </div>
-              <div className="max-h-32 overflow-auto mt-2 pr-2">
-                {kb.symptoms.map((s) => (
-                  <label
-                    key={s.id}
-                    className="flex items-center space-x-3"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={newRulePremises.includes(s.id)}
-                      onChange={() => toggleNewPremise(s.id)}
-                    />
-                    <span className="text-sm">{s.text}</span>
-                  </label>
-                ))}
-              </div>
-
-              <form onSubmit={addRule} className="mt-3 space-y-2">
-                <input
-                  value={newRuleConclusionText}
-                  onChange={(e) =>
-                    setNewRuleConclusionText(e.target.value)
-                  }
-                  placeholder="Kesimpulan / diagnosis"
-                  className="w-full p-2 border rounded"
-                />
-
-                <div className="flex items-center gap-2">
-                  <label className="text-sm">Confidence:</label>
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* LEFT */}
+          <div className="p-6 rounded-2xl bg-white/20 backdrop-blur-lg border border-white/20 shadow-lg">
+            <h2 className="text-xl font-semibold mb-4">Pilih Gejala</h2>
+            <div className="space-y-2 max-h-64 overflow-auto pr-2">
+              {kb.symptoms.map((s) => (
+                <label key={s.id} className="flex items-center space-x-2">
                   <input
-                    type="number"
-                    step="0.05"
-                    min="0.1"
-                    max="1"
-                    value={newRuleConfidence}
-                    onChange={(e) =>
-                      setNewRuleConfidence(e.target.value)
-                    }
-                    className="p-1 border rounded w-24"
+                    type="checkbox"
+                    checked={selectedSymptoms.includes(s.id)}
+                    onChange={() => toggleSymptom(s.id)}
+                    className="accent-blue-500"
                   />
-
-                  <button
-                    className="ml-auto px-3 bg-indigo-600 text-white rounded"
-                  >
-                    Tambah Rule
-                  </button>
-                </div>
-              </form>
+                  <span>{s.text}</span>
+                </label>
+              ))}
             </div>
-
-            {/* Rules List */}
-            <div className="mt-4">
-              <h4 className="font-medium">Rules saat ini</h4>
-              <div className="max-h-40 overflow-auto text-sm mt-2">
-                {kb.rules.map((r) => (
-                  <div key={r.id} className="mb-2 p-2 border rounded">
-                    <div>
-                      <strong>{r.id}</strong> — {r.then.text} (conf:{" "}
-                      {r.confidence})
-                    </div>
-                    <div className="text-xs">
-                      if:{" "}
-                      {r.if
-                        .map((i) => symptomMap[i] || i)
-                        .join(" • ")}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-4 text-xs text-gray-600">
-              Data permanen ada di{" "}
-              <code>src/data/knowledge.json</code>
+            <div className="flex gap-2 mt-4">
+              <button onClick={runInference} className="px-4 py-2 bg-blue-600 rounded text-white hover:bg-blue-700 transition">
+                Diagnosa
+              </button>
+              <button onClick={reset} className="px-4 py-2 bg-gray-300 rounded text-black hover:bg-gray-400 transition">
+                Reset
+              </button>
             </div>
           </div>
+
+          {/* RIGHT */}
+          <div className="p-6 rounded-2xl bg-white/20 backdrop-blur-lg border border-white/20 shadow-lg max-h-[600px] overflow-auto">
+            <h2 className="text-xl font-semibold mb-4">Hasil Diagnosis</h2>
+            {!result && <p>Pilih gejala dan klik Diagnosa.</p>}
+            {result && (
+              <>
+                <div className="mb-3">
+                  <strong>Fakta Akhir:</strong>
+                  <ul className="list-disc pl-5">
+                    {result.facts.map((f, i) => <li key={i}>{symptomMap[f] || f}</li>)}
+                  </ul>
+                </div>
+
+                <div className="mb-3">
+                  <strong>Diagnosa + Confidence:</strong>
+                  <ul className="list-disc pl-5">
+                    {result.diagnoses.length === 0 ? (
+                      <li>Tidak ada diagnosa yang cocok.</li>
+                    ) : (
+                      result.diagnoses.map((d, i) => (
+                        <li key={i}>{d.diagnosisText} — CF: {Math.round(d.confidence*100)}%</li>
+                      ))
+                    )}
+                  </ul>
+                </div>
+
+                <div>
+                  <strong>Trace:</strong>
+                  <div className="text-xs max-h-36 overflow-auto bg-white/10 p-2 rounded mt-1">
+                    {result.trace.map((t,i) => (
+                      <div key={i} className="mb-2">
+                        <div>Rule: {t.ruleId} — Fired: {t.fired ? "Ya" : "Tidak"}</div>
+                        <div>Matched: {t.matched.join(", ") || "-"}</div>
+                        {t.conclusion && <div>Then: {t.conclusion.text} — CF: {t.confidence*100}%</div>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="text-center text-white/80 text-xs mt-6">
+          <strong>Asmaul Husnah Nasrullah</strong>
         </div>
       </div>
     </div>
