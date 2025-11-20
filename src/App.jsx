@@ -222,12 +222,6 @@ export default function App() {
           </div>
         </div>
       </main>
-
-     {/* Footer */}
-<footer className="mt-12 py-4 text-center text-white/80 text-sm backdrop-blur-md bg-white/10 border-t border-white/20">
-  <p> <strong>Asmaul Husnah Nasrullah</strong> | 2025 © PsyTech</p>
-</footer>
-
 {/* Admin Forms Bawah Footer */}
 <div className="max-w-4xl mx-auto my-6 p-6 bg-white/20 backdrop-blur-lg rounded-2xl border border-white/20 shadow-lg text-white">
   <h3 className="text-lg font-semibold mb-3">Tambah Gejala & Rule (Admin)</h3>
@@ -303,4 +297,10 @@ export default function App() {
     Catatan: Penambahan gejala dan rule hanya tersimpan sementara di memory.
   </div>
 </div>
+     {/* Footer */}
+<footer className="mt-12 py-4 text-center text-white/80 text-sm backdrop-blur-md bg-white/10 border-t border-white/20">
+  <p> <strong>Asmaul Husnah Nasrullah</strong> | 2025 © PsyTech</p>
+</footer>
+
+
 
