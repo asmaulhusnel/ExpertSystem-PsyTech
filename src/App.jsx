@@ -223,10 +223,84 @@ export default function App() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="mt-12 py-4 text-center text-white/80 text-sm backdrop-blur-md bg-white/10 border-t border-white/20">
-        <p>Design by: <strong>Asmaul Husnah Nasrullah</strong> | 2025 © PsyTech</p>
-      </footer>
+     {/* Footer */}
+<footer className="mt-12 py-4 text-center text-white/80 text-sm backdrop-blur-md bg-white/10 border-t border-white/20">
+  <p>Design by: <strong>Asmaul Husnah Nasrullah</strong> | 2025 © PsyTech</p>
+</footer>
+
+{/* Admin Forms Bawah Footer */}
+<div className="max-w-4xl mx-auto my-6 p-6 bg-white/20 backdrop-blur-lg rounded-2xl border border-white/20 shadow-lg text-white">
+  <h3 className="text-lg font-semibold mb-3">Tambah Gejala & Rule (Admin)</h3>
+
+  {/* Tambah Gejala */}
+  <div className="mb-4">
+    <h4 className="font-medium mb-1">Tambah Gejala</h4>
+    <form onSubmit={addSymptom} className="flex gap-2">
+      <input
+        type="text"
+        value={newSymptomText}
+        onChange={(e) => setNewSymptomText(e.target.value)}
+        placeholder="Contoh: Sering cemas"
+        className="flex-1 p-2 border rounded text-black"
+      />
+      <button
+        type="submit"
+        className="px-3 bg-green-600 rounded hover:bg-green-700 transition"
+      >
+        Tambah Gejala
+      </button>
+    </form>
+  </div>
+
+  {/* Tambah Rule */}
+  <div className="mb-2">
+    <h4 className="font-medium mb-1">Tambah Rule (If → Then)</h4>
+    <div className="text-sm text-white/80 mb-1">Pilih premis:</div>
+    <div className="flex flex-wrap gap-2 max-h-32 overflow-auto mb-2">
+      {kb.symptoms.map((s) => (
+        <label key={s.id} className="flex items-center space-x-1 bg-white/20 px-2 py-1 rounded cursor-pointer hover:bg-white/30 transition">
+          <input
+            type="checkbox"
+            checked={newRulePremises.includes(s.id)}
+            onChange={() => toggleNewPremise(s.id)}
+            className="accent-blue-500"
+          />
+          <span className="text-sm">{s.text}</span>
+        </label>
+      ))}
     </div>
-  );
-}
+
+    <form onSubmit={addRule} className="space-y-2">
+      <input
+        type="text"
+        value={newRuleConclusionText}
+        onChange={(e) => setNewRuleConclusionText(e.target.value)}
+        placeholder="Kesimpulan / diagnosis"
+        className="w-full p-2 border rounded text-black"
+      />
+      <div className="flex items-center gap-2">
+        <label className="text-sm">Confidence:</label>
+        <input
+          type="number"
+          step="0.05"
+          min="0.1"
+          max="1"
+          value={newRuleConfidence}
+          onChange={(e) => setNewRuleConfidence(e.target.value)}
+          className="p-1 border rounded w-24 text-black"
+        />
+        <button
+          type="submit"
+          className="ml-auto px-3 bg-indigo-600 rounded hover:bg-indigo-700 transition"
+        >
+          Tambah Rule
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div className="text-xs text-white/70 mt-2">
+    Catatan: Penambahan gejala dan rule hanya tersimpan sementara di memory.
+  </div>
+</div>
+
