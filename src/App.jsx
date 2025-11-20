@@ -133,7 +133,7 @@ export default function App() {
               masalah psikologis berdasarkan gejala yang Anda alami. Pilih menu
               konsultasi untuk memulai proses diagnosa.
             </p>
-            <p>
+          <p className="mt-6 text-gray-300 max-w-xl mx-auto">
             Masalah psikologis adalah kondisi di mana seseorang mengalami gangguan pada kesehatan mental, emosional, atau perilakunya, sehingga memengaruhi cara berpikir, merasakan, dan berinteraksi dengan orang lain. Masalah ini bisa muncul karena berbagai faktor, seperti tekanan hidup, konflik interpersonal, trauma, atau ketidakseimbangan kimiawi dalam otak.
 Beberapa contoh masalah psikologis yang umum terjadi antara lain:
 Stres dan kecemasan: perasaan tegang, cemas berlebihan, atau khawatir terus-menerus.
