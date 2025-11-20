@@ -6,12 +6,10 @@ export default function App() {
   const [result, setResult] = useState(null);
 
   // Semua gejala unik
-  const symptoms = [...new Set(knowledgeBase.flatMap((rule) => rule.kondisi))];
+  const symptoms = [...new Set(knowledgeBase.flatMap(rule => rule.kondisi))];
 
   const toggleSymptom = (s) => {
-    setSelectedSymptoms((prev) =>
-      prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]
-    );
+    setSelectedSymptoms(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]);
   };
 
   const runDiagnosis = () => {
@@ -44,16 +42,14 @@ export default function App() {
       </div>
 
       <div className="pt-24 max-w-5xl mx-auto px-6 relative z-10 text-white">
-        <h1 className="text-4xl font-bold mb-6 text-center">
-          Diagnosa Psikologis Mahasiswa
-        </h1>
+        <h1 className="text-4xl font-bold mb-6 text-center">Diagnosa Psikologis Mahasiswa</h1>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Left: Input */}
+          {/* Kiri: Input Gejala */}
           <div className="p-6 rounded-xl bg-white/20 backdrop-blur border border-white/30">
             <h2 className="text-xl font-semibold mb-4">Pilih Gejala</h2>
             <div className="space-y-2 max-h-64 overflow-auto pr-2">
-              {symptoms.map((s) => (
+              {symptoms.map(s => (
                 <label key={s} className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -64,6 +60,60 @@ export default function App() {
                 </label>
               ))}
             </div>
-
             <div className="flex gap-2 mt-4">
-              <button onClick={runDiagnosis} className="px-4 p
+              <button onClick={runDiagnosis} className="px-4 py-2 bg-blue-600 rounded text-white">Diagnosa</button>
+              <button onClick={reset} className="px-4 py-2 bg-gray-300 rounded">Reset</button>
+            </div>
+          </div>
+
+          {/* Kanan: Hasil + CF + Trace */}
+          <div className="p-6 rounded-xl bg-white/20 backdrop-blur border border-white/30 max-h-[500px] overflow-auto">
+            <h2 className="text-xl font-semibold mb-4">Hasil Diagnosis</h2>
+
+            {!result && <p>Pilih gejala dan klik Diagnosa.</p>}
+
+            {result && (
+              <>
+                <div className="mb-3">
+                  <strong>Fakta Akhir (Gejala Terpilih):</strong>
+                  <ul className="list-disc pl-5">
+                    {result.facts.map((f,i) => <li key={i}>{f}</li>)}
+                  </ul>
+                </div>
+
+                <div className="mb-3">
+                  <strong>Diagnosa + CF:</strong>
+                  <ul className="list-disc pl-5">
+                    {result.diagnoses.length === 0 ? (
+                      <li>Tidak ada diagnosa yang cocok.</li>
+                    ) : (
+                      result.diagnoses.map((d,i) => <li key={i}>{d.hasil} — CF: {Math.round(d.cf*100)}%</li>)
+                    )}
+                  </ul>
+                </div>
+
+                <div>
+                  <strong>Trace Forward Chaining:</strong>
+                  <div className="text-xs max-h-36 overflow-auto bg-white/10 p-2 rounded mt-1">
+                    {result.trace.map((t,i) => (
+                      <div key={i} className="mb-2">
+                        <div>Rule: {t.ruleId} — Fired: {t.fired ? "Ya" : "Tidak"}</div>
+                        <div>Matched: {t.matched.join(", ") || "-"}</div>
+                        {t.conclusion && <div>Then: {t.conclusion} — CF: {t.cf*100}%</div>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center text-white/80 text-xs mt-6">
+          <strong>Asmaul Husnah Nasrullah</strong>
+        </div>
+      </div>
+    </div>
+  );
+}
