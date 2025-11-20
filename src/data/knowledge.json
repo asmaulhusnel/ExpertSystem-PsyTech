@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "title": "PsyTech Knowledge Base",
+    "version": "1.0"
+  },
+  "symptoms": [
+    {"id": "s1", "text": "Sering merasa sedih atau murung"},
+    {"id": "s2", "text": "Kehilangan minat pada aktivitas sehari-hari"},
+    {"id": "s3", "text": "Sulit tidur atau tidur berlebihan"},
+    {"id": "s4", "text": "Kesulitan berkonsentrasi"},
+    {"id": "s5", "text": "Menarik diri dari teman atau keluarga"},
+    {"id": "s6", "text": "Merasa cemas berlebihan"},
+    {"id": "s7", "text": "Sering panik atau serangan kecemasan"},
+    {"id": "s8", "text": "Perubahan nafsu makan"},
+    {"id": "s9", "text": "Muncul pikiran ingin menyakiti diri sendiri"}
+  ],
+  "rules": [
+    {
+      "id": "r1",
+      "if": ["s1","s2","s3","s4"],
+      "then": {"id":"d_depression","text":"Depresi (perkiraan)"},
+      "confidence": 0.7
+    },
+    {
+      "id": "r2",
+      "if": ["s6","s3","s7","s4"],
+      "then": {"id":"d_anxiety","text":"Gangguan kecemasan"},
+      "confidence": 0.7
+    },
+    {
+      "id": "r3",
+      "if": ["s9"],
+      "then": {"id":"d_suicidal","text":"Risiko ide bunuh diri - butuh tindakan segera"},
+      "confidence": 0.99
+    }
+  ]
+}
