@@ -138,23 +138,23 @@ export default function App() {
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-0"></div>
 
       {/* Navbar */}
-      <nav className="fixed top-0 w-full z-20 backdrop-blur-md bg-white/10 border-b border-white/20">
+      <header className="fixed top-0 w-full z-20 backdrop-blur-md bg-white/10 border-b border-white/20">
         <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center text-white">
           <div className="text-xl font-bold tracking-wide">PsyTech</div>
           <div className="flex space-x-6 text-sm">
-            <a href="#" className="hover:text-blue-300 transition">Beranda</a>
+            <a href="#" className="hover:text-blue-300 transition">Dashboard</a>
             <a href="#konsultasi" className="hover:text-blue-300 transition">Konsultasi</a>
-            <a href="#" className="hover:text-blue-300 transition">Tentang</a>
+            <a href="#" className="hover:text-blue-300 transition">About</a>
           </div>
         </div>
-      </nav>
+      </header>
 
-      <div className="pt-24 max-w-6xl mx-auto px-6 relative z-10 text-white">
+      <main className="pt-24 max-w-6xl mx-auto px-6 relative z-10 text-white">
         <h1 className="text-4xl font-bold text-center mb-6">Diagnosa Psikologis Mahasiswa</h1>
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* LEFT */}
-          <div className="p-6 rounded-2xl bg-white/20 backdrop-blur-lg border border-white/20 shadow-lg">
+          <div className="p-6 rounded-2xl bg-white/20 backdrop-blur-lg border border-white/20 shadow-lg" id="konsultasi">
             <h2 className="text-xl font-semibold mb-4">Pilih Gejala</h2>
             <div className="space-y-2 max-h-64 overflow-auto pr-2">
               {kb.symptoms.map((s) => (
@@ -221,11 +221,12 @@ export default function App() {
             )}
           </div>
         </div>
+      </main>
 
-        <div className="text-center text-white/80 text-xs mt-6">
-          <strong>Asmaul Husnah Nasrullah</strong>
-        </div>
-      </div>
+      {/* Footer */}
+      <footer className="mt-12 py-4 text-center text-white/80 text-sm backdrop-blur-md bg-white/10 border-t border-white/20">
+        <p>Design by: <strong>Asmaul Husnah Nasrullah</strong> | 2025 © PsyTech</p>
+      </footer>
     </div>
   );
 }
