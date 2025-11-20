@@ -131,9 +131,9 @@ export default function App() {
   kb.symptoms.forEach((s) => (symptomMap[s.id] = s.text));
 
   return (
-    <div className="min-h-screen bg-yellow-50 text-black">
+    <div className="min-h-screen bg-gray-900 text-white">
       {/* Navbar */}
-      <header className="bg-yellow-300 sticky top-0 z-20 shadow-md">
+      <header className="bg-gray-800 sticky top-0 z-20 shadow-md">
         <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
           <div className="text-xl font-bold">PsyTech</div>
           <div className="flex space-x-6 text-sm">
@@ -145,17 +145,18 @@ export default function App() {
 
       <main className="max-w-6xl mx-auto px-6 py-6">
         {page === "dashboard" && (
-          <div>
+          <div className="text-center">
+            <img src="/expert-system.png" alt="Sistem Pakar" className="mx-auto mb-6 w-64" />
             <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
-            <p>Selamat datang di PsyTech — Sistem Pakar Diagnosa Psikologis.</p>
-            <p className="mt-2">Di sini Anda bisa mempelajari masalah psikologi, gejala, dan memanfaatkan sistem diagnosa gejala secara otomatis.</p>
+            <p>Selamat datang di PsyTech — Sistem Pakar Diagnosa Masalah Psikologis.</p>
+            <p className="mt-2">Sistem ini membantu mendiagnosa masalah psikologi berdasarkan gejala yang dipilih. Anda dapat mempelajari gejala, rule, dan memanfaatkan sistem untuk konsultasi psikologi sederhana.</p>
           </div>
         )}
 
         {page === "konsultasi" && (
           <div className="grid md:grid-cols-2 gap-6">
             {/* LEFT: Konsultasi */}
-            <div className="p-6 rounded-xl bg-white/70 shadow-md">
+            <div className="p-6 rounded-xl bg-gray-800/80 shadow-md">
               <h2 className="text-xl font-semibold mb-4">Pilih Gejala</h2>
               <div className="space-y-2 max-h-64 overflow-auto pr-2">
                 {kb.symptoms.map((s) => (
@@ -164,24 +165,24 @@ export default function App() {
                       type="checkbox"
                       checked={selectedSymptoms.includes(s.id)}
                       onChange={() => toggleSymptom(s.id)}
-                      className="accent-yellow-500"
+                      className="accent-yellow-400"
                     />
                     <span>{s.text}</span>
                   </label>
                 ))}
               </div>
               <div className="flex gap-2 mt-4">
-                <button onClick={runInference} className="px-4 py-2 bg-yellow-500 rounded text-white hover:bg-yellow-600 transition">
+                <button onClick={runInference} className="px-4 py-2 bg-yellow-500 rounded text-black hover:bg-yellow-600 transition">
                   Diagnosa
                 </button>
-                <button onClick={reset} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+                <button onClick={reset} className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700">
                   Reset
                 </button>
               </div>
             </div>
 
             {/* RIGHT: Hasil */}
-            <div className="p-6 rounded-xl bg-white/70 shadow-md max-h-[600px] overflow-auto">
+            <div className="p-6 rounded-xl bg-gray-800/80 shadow-md max-h-[600px] overflow-auto">
               <h2 className="text-xl font-semibold mb-4">Hasil Diagnosis</h2>
               {!result && <p>Pilih gejala dan klik Diagnosa.</p>}
               {result && (
@@ -206,7 +207,7 @@ export default function App() {
                   </div>
                   <div>
                     <strong>Trace:</strong>
-                    <div className="text-xs max-h-36 overflow-auto bg-white/20 p-2 rounded mt-1">
+                    <div className="text-xs max-h-36 overflow-auto bg-gray-700/40 p-2 rounded mt-1">
                       {result.trace.map((t,i) => (
                         <div key={i} className="mb-2">
                           <div>Rule: {t.ruleId} — Fired: {t.fired ? "Ya" : "Tidak"}</div>
@@ -224,7 +225,7 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-12 py-4 text-center text-yellow-900/80 bg-yellow-200">
+      <footer className="mt-12 py-4 text-center text-gray-300 bg-gray-900 border-t border-gray-700">
         <p>Design by: <strong>Asmaul Husnah Nasrullah</strong> | 2025 © PsyTech</p>
       </footer>
     </div>
