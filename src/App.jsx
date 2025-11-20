@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import kbSource from "./data/knowledge.json";
 
 const clone = (v) => JSON.parse(JSON.stringify(v));
@@ -137,15 +136,22 @@ export default function App() {
   kb.symptoms.forEach((s) => (symptomMap[s.id] = s.text));
 
   return (
-    <div className="min-h-screen bg-dynamic">
-      <div className="background-overlay"></div>
+    <div
+      className="min-h-screen bg-cover bg-center bg-no-repeat relative"
+      style={{
+        backgroundImage: "url('/bg-psytech.jpg')", // ← GANTI SESUAI NAMA FILE
+      }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
+      {/* CONTENT */}
       <div className="min-h-screen flex items-center justify-center p-6 relative z-10">
         <div className="max-w-5xl w-full grid md:grid-cols-2 gap-6">
           
           {/* LEFT SIDE */}
-          <div className="card p-6 rounded-2xl bg-white/80 shadow-lg backdrop-blur">
-            <h1 className="text-2xl font-bold mb-2">
+          <div className="p-6 rounded-2xl bg-white/80 shadow-lg backdrop-blur">
+            <h1 className="text-2xl font-bold mb-2 text-gray-800">
               PsyTech — Diagnosa Psikologis
             </h1>
             <p className="text-sm text-gray-700 mb-4">
@@ -245,8 +251,8 @@ export default function App() {
             </div>
           </div>
 
-          {/* RIGHT SIDE — KB EDITOR */}
-          <div className="card p-6 rounded-2xl bg-white/80 shadow-lg backdrop-blur">
+          {/* RIGHT SIDE */}
+          <div className="p-6 rounded-2xl bg-white/80 shadow-lg backdrop-blur">
             <h3 className="text-lg font-semibold mb-2">Knowledge Base Editor</h3>
             <p className="text-sm text-gray-700 mb-4">
               Tambah gejala dan rule (tidak permanen, hanya memory).
@@ -355,3 +361,7 @@ export default function App() {
     </div>
   );
 }
+{/* FOOTER DESIGNER */}
+<div className="absolute bottom-3 w-full text-center text-white/80 text-xs z-20">
+  Design by: <strong>Asmaul Husnah Nasrullah</strong>
+</div>
