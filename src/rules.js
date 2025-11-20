@@ -1,26 +1,34 @@
+// rules.js
 export const knowledgeBase = [
-  {
-    kondisi: ["cemas", "takut ortam", "sulit tidur"],
-    hasil: "Gangguan Kecemasan Umum (GAD)"
-  },
-  {
-    kondisi: ["sedih berkepanjangan", "tidak bersemangat", "sulit fokus"],
-    hasil: "Depresi Ringan"
-  },
-  {
-    kondisi: ["mudah marah", "gelisah", "tekanan akademik"],
-    hasil: "Stress Akademik Tinggi"
-  },
-  {
-    kondisi: ["menarik diri", "tidak ingin bersosialisasi", "lelah secara emosional"],
-    hasil: "Burnout / Kelelahan Emosional"
-  }
+  { id: "r1", kondisi: ["Sering cemas", "Sulit tidur"], hasil: "Gangguan Kecemasan Umum" },
+  { id: "r2", kondisi: ["Sedih berkepanjangan", "Tidak bersemangat"], hasil: "Depresi Ringan" },
+  { id: "r3", kondisi: ["Mudah marah", "Sulit tidur"], hasil: "Stress Akademik Tinggi" }
 ];
 
-export function forwardChaining(gejala) {
-  for (const rule of knowledgeBase) {
-    const cocok = rule.kondisi.every(k => gejala.includes(k));
-    if (cocok) return rule.hasil;
+export function forwardChaining(selectedSymptoms, rules = knowledgeBase) {
+  const facts = new Set(selectedSymptoms);
+  const diagnoses = new Set();
+  const trace = [];
+
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const rule of rules) {
+      // Jika semua kondisi terpenuhi
+      const allMatch = rule.kondisi.every((c) => facts.has(c));
+      if (allMatch && !diagnoses.has(rule.hasil)) {
+        diagnoses.add(rule.hasil);
+        trace.push({ ruleId: rule.id, fired: true, matched: rule.kondisi, conclusion: rule.hasil });
+        changed = true;
+      } else if (!allMatch) {
+        trace.push({ ruleId: rule.id, fired: false, matched: rule.kondisi.filter((c) => facts.has(c)), conclusion: rule.hasil });
+      }
+    }
   }
-  return "Tidak ditemukan kecocokan masalah psikologi.";
+
+  return {
+    facts: Array.from(facts),
+    diagnoses: Array.from(diagnoses),
+    trace
+  };
 }
