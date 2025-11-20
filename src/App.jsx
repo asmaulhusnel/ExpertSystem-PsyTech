@@ -1,232 +1,36 @@
-import React, { useState } from "react";
-import kbSource from "./data/knowledge.json";
-
-const clone = (v) => JSON.parse(JSON.stringify(v));
-
-function forwardChaining(initialFacts, rules) {
-  const facts = new Set(initialFacts);
-  const inferred = new Set();
-  const trace = [];
-  const fired = new Set();
-
-  let changed = true;
-  while (changed) {
-    changed = false;
-    for (const rule of rules) {
-      if (fired.has(rule.id)) continue;
-      const allMatch = rule.if.every((prem) => facts.has(prem));
-      if (allMatch) {
-        const conclusionId = rule.then.id;
-        if (!facts.has(conclusionId)) {
-          facts.add(conclusionId);
-          inferred.add(conclusionId);
-          changed = true;
-        }
-        fired.add(rule.id);
-        trace.push({
-          ruleId: rule.id,
-          fired: true,
-          matched: rule.if.slice(),
-          conclusion: rule.then,
-          confidence: rule.confidence ?? 1,
-        });
-      } else {
-        trace.push({
-          ruleId: rule.id,
-          fired: false,
-          matched: rule.if.filter((p) => facts.has(p)),
-          needed: rule.if.length,
-          confidence: rule.confidence ?? 0,
-        });
-      }
-    }
-  }
-
-  const diagnoses = [];
-  for (const rule of rules) {
-    if (fired.has(rule.id) && rule.then.id.startsWith("d_")) {
-      diagnoses.push({
-        ruleId: rule.id,
-        diagnosisId: rule.then.id,
-        diagnosisText: rule.then.text,
-        confidence: rule.confidence ?? 1,
-      });
-    }
-  }
-
-  return {
-    facts: Array.from(facts),
-    inferred: Array.from(inferred),
-    diagnoses,
-    trace,
-  };
-}
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Konsultasi from "./pages/Konsultasi";
+import Dashboard from "./pages/Dashboard";
 
 export default function App() {
-  const [kb, setKb] = useState(() => clone(kbSource));
-  const [selectedSymptoms, setSelectedSymptoms] = useState([]);
-  const [result, setResult] = useState(null);
-
-  const [newSymptomText, setNewSymptomText] = useState("");
-  const [newRulePremises, setNewRulePremises] = useState([]);
-  const [newRuleConclusionText, setNewRuleConclusionText] = useState("");
-  const [newRuleConfidence, setNewRuleConfidence] = useState(0.7);
-
-  function toggleSymptom(id) {
-    setSelectedSymptoms((s) =>
-      s.includes(id) ? s.filter((x) => x !== id) : [...s, id]
-    );
-  }
-
-  function runInference() {
-    const initialFacts = selectedSymptoms.slice();
-    const out = forwardChaining(initialFacts, kb.rules);
-    setResult(out);
-  }
-
-  function reset() {
-    setSelectedSymptoms([]);
-    setResult(null);
-  }
-
-  function addSymptom(e) {
-    e.preventDefault();
-    if (!newSymptomText.trim()) return alert("Masukkan teks gejala.");
-    const id = "s" + (kb.symptoms.length + 1 + Math.floor(Math.random() * 1000));
-    const newSym = { id, text: newSymptomText.trim() };
-    setKb((k) => ({ ...k, symptoms: [...k.symptoms, newSym] }));
-    setNewSymptomText("");
-    setSelectedSymptoms((s) => [...s, id]);
-  }
-
-  function addRule(e) {
-    e.preventDefault();
-    if (newRulePremises.length === 0)
-      return alert("Pilih minimal satu premis.");
-    if (!newRuleConclusionText.trim())
-      return alert("Masukkan teks kesimpulan.");
-    const rid = "r" + (kb.rules.length + 1 + Math.floor(Math.random() * 1000));
-    const diagId = "d_" + rid;
-    const rule = {
-      id: rid,
-      if: newRulePremises.slice(),
-      then: { id: diagId, text: newRuleConclusionText.trim() },
-      confidence: Number(newRuleConfidence) || 0.7,
-    };
-    setKb((k) => ({ ...k, rules: [...k.rules, rule] }));
-    setNewRulePremises([]);
-    setNewRuleConclusionText("");
-    setNewRuleConfidence(0.7);
-    alert("Rule ditambahkan (disimpan sementara).");
-  }
-
-  function toggleNewPremise(id) {
-    setNewRulePremises((p) =>
-      p.includes(id) ? p.filter((x) => x !== id) : [...p, id]
-    );
-  }
-
-  const symptomMap = {};
-  kb.symptoms.forEach((s) => (symptomMap[s.id] = s.text));
-
   return (
-    <div
-      className="min-h-screen relative bg-cover bg-center"
-      style={{ backgroundImage: "url('/bg-psytech.jpg')" }}
-    >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-0"></div>
-
-      {/* Navbar */}
-      <header className="fixed top-0 w-full z-20 backdrop-blur-md bg-white/10 border-b border-white/20">
-        <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center text-white">
-          <div className="text-xl font-bold tracking-wide">PsyTech</div>
-          <div className="flex space-x-6 text-sm">
-            <a href="#" className="hover:text-blue-300 transition">Dashboard</a>
-            <a href="#konsultasi" className="hover:text-blue-300 transition">Konsultasi</a>
-            <a href="#" className="hover:text-blue-300 transition">About</a>
-          </div>
-        </div>
-      </header>
-
-      <main className="pt-24 max-w-6xl mx-auto px-6 relative z-10 text-white">
-        <h1 className="text-4xl font-bold text-center mb-6">Sistem Pakar</h1>
- <h2 className="text-3xl font-bold text-center mb-6">Diagnosa Masalah Psikologis</h2>
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* LEFT */}
-          <div className="p-6 rounded-2xl bg-white/20 backdrop-blur-lg border border-white/20 shadow-lg" id="konsultasi">
-            <h2 className="text-xl font-semibold mb-4">Pilih Gejala</h2>
-            <div className="space-y-2 max-h-64 overflow-auto pr-2">
-              {kb.symptoms.map((s) => (
-                <label key={s.id} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedSymptoms.includes(s.id)}
-                    onChange={() => toggleSymptom(s.id)}
-                    className="accent-blue-500"
-                  />
-                  <span>{s.text}</span>
-                </label>
-              ))}
-            </div>
-            <div className="flex gap-2 mt-4">
-              <button onClick={runInference} className="px-4 py-2 bg-blue-600 rounded text-white hover:bg-blue-700 transition">
-                Diagnosa
-              </button>
-              <button onClick={reset} className="px-4 py-2 bg-gray-300 rounded text-black hover:bg-gray-400 transition">
-                Reset
-              </button>
+    <Router>
+      <div className="min-h-screen bg-yellow-50 text-gray-900">
+        {/* Navbar */}
+        <header className="fixed top-0 w-full z-20 backdrop-blur-md bg-yellow-200/50 border-b border-yellow-300">
+          <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+            <div className="text-xl font-bold tracking-wide">PsyTech</div>
+            <div className="flex space-x-6 text-sm">
+              <Link to="/" className="hover:text-yellow-700 transition">Dashboard</Link>
+              <Link to="/konsultasi" className="hover:text-yellow-700 transition">Konsultasi</Link>
+              <Link to="#" className="hover:text-yellow-700 transition">About</Link>
             </div>
           </div>
+        </header>
 
-          {/* RIGHT */}
-          <div className="p-6 rounded-2xl bg-white/20 backdrop-blur-lg border border-white/20 shadow-lg max-h-[600px] overflow-auto">
-            <h2 className="text-xl font-semibold mb-4">Hasil Diagnosis</h2>
-            {!result && <p>Pilih gejala dan klik Diagnosa.</p>}
-            {result && (
-              <>
-                <div className="mb-3">
-                  <strong>Fakta Akhir:</strong>
-                  <ul className="list-disc pl-5">
-                    {result.facts.map((f, i) => <li key={i}>{symptomMap[f] || f}</li>)}
-                  </ul>
-                </div>
+        <main className="pt-24 max-w-6xl mx-auto px-6">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/konsultasi" element={<Konsultasi />} />
+          </Routes>
+        </main>
 
-                <div className="mb-3">
-                  <strong>Diagnosa + Confidence:</strong>
-                  <ul className="list-disc pl-5">
-                    {result.diagnoses.length === 0 ? (
-                      <li>Tidak ada diagnosa yang cocok.</li>
-                    ) : (
-                      result.diagnoses.map((d, i) => (
-                        <li key={i}>{d.diagnosisText} — CF: {Math.round(d.confidence*100)}%</li>
-                      ))
-                    )}
-                  </ul>
-                </div>
-
-                <div>
-                  <strong>Trace:</strong>
-                  <div className="text-xs max-h-36 overflow-auto bg-white/10 p-2 rounded mt-1">
-                    {result.trace.map((t,i) => (
-                      <div key={i} className="mb-2">
-                        <div>Rule: {t.ruleId} — Fired: {t.fired ? "Ya" : "Tidak"}</div>
-                        <div>Matched: {t.matched.join(", ") || "-"}</div>
-                        {t.conclusion && <div>Then: {t.conclusion.text} — CF: {t.confidence*100}%</div>}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="mt-12 py-4 text-center text-white/80 text-sm backdrop-blur-md bg-white/10 border-t border-white/20">
-        <p><strong>Asmaul Husnah Nasrullah</strong> | 2025 © PsyTech</p>
-      </footer>
-    </div>
+        {/* Footer */}
+        <footer className="mt-12 py-4 text-center text-gray-700 text-sm border-t border-yellow-300">
+          <p>Design by: <strong>Asmaul Husnah Nasrullah</strong> | 2025 © PsyTech</p>
+        </footer>
+      </div>
+    </Router>
   );
 }
