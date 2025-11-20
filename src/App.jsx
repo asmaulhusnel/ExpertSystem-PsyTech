@@ -146,7 +146,10 @@ export default function App() {
       <main className="max-w-6xl mx-auto px-6 py-6">
         {page === "dashboard" && (
           <div className="text-center">
-            <img src="/bg-psytech.jpg" alt="Sistem Pakar" className="mx-auto mb-6 w-64 rounded" />
+            import bgPsytech from "./assets/bg.jpg";
+<img src={bg} alt="Sistem Pakar" className="mx-auto mb-6 w-64 rounded" />
+
+        
             <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
             <p>Selamat datang di PsyTech — Sistem Pakar Diagnosa Psikologis.</p>
             <p className="mt-2">Sistem ini membantu mendiagnosa masalah psikologi berdasarkan gejala yang dipilih. Anda dapat mempelajari gejala, rule, dan memanfaatkan sistem untuk konsultasi psikologi sederhana.</p>
