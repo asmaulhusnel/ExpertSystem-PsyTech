@@ -150,7 +150,7 @@ export default function App() {
       </header>
 
       <main className="pt-24 max-w-6xl mx-auto px-6 relative z-10 text-white">
-        <h1 className="text-4xl font-bold text-center mb-6">Sistem Pakar Diagnosa Masalah Psikologis</h1>
+        <h1 className="text-4xl font-bold text-center mb-6">Sistem Pakar</h1>
  <h2 className="text-3xl font-bold text-center mb-6">Diagnosa Masalah Psikologis</h2>
         <div className="grid md:grid-cols-2 gap-6">
           {/* LEFT */}
