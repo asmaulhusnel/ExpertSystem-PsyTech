@@ -225,7 +225,7 @@ export default function App() {
 
      {/* Footer */}
 <footer className="mt-12 py-4 text-center text-white/80 text-sm backdrop-blur-md bg-white/10 border-t border-white/20">
-  <p>Design by: <strong>Asmaul Husnah Nasrullah</strong> | 2025 © PsyTech</p>
+  <p> <strong>Asmaul Husnah Nasrullah</strong> | 2025 © PsyTech</p>
 </footer>
 
 {/* Admin Forms Bawah Footer */}
