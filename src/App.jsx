@@ -146,79 +146,88 @@ export default function App() {
       <main className="max-w-6xl mx-auto px-6 py-6">
         {page === "dashboard" && (
           <div className="text-center">
-            <img src="/expert-system.png" alt="Sistem Pakar" className="mx-auto mb-6 w-64" />
+            <img src="/bg-psytech.jpg" alt="Sistem Pakar" className="mx-auto mb-6 w-64 rounded" />
             <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
-            <p>Selamat datang di PsyTech — Sistem Pakar Diagnosa Masalah Psikologis.</p>
+            <p>Selamat datang di PsyTech — Sistem Pakar Diagnosa Psikologis.</p>
             <p className="mt-2">Sistem ini membantu mendiagnosa masalah psikologi berdasarkan gejala yang dipilih. Anda dapat mempelajari gejala, rule, dan memanfaatkan sistem untuk konsultasi psikologi sederhana.</p>
           </div>
         )}
 
         {page === "konsultasi" && (
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* LEFT: Konsultasi */}
-            <div className="p-6 rounded-xl bg-gray-800/80 shadow-md">
-              <h2 className="text-xl font-semibold mb-4">Pilih Gejala</h2>
-              <div className="space-y-2 max-h-64 overflow-auto pr-2">
-                {kb.symptoms.map((s) => (
-                  <label key={s.id} className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedSymptoms.includes(s.id)}
-                      onChange={() => toggleSymptom(s.id)}
-                      className="accent-yellow-400"
-                    />
-                    <span>{s.text}</span>
-                  </label>
-                ))}
-              </div>
-              <div className="flex gap-2 mt-4">
-                <button onClick={runInference} className="px-4 py-2 bg-yellow-500 rounded text-black hover:bg-yellow-600 transition">
-                  Diagnosa
-                </button>
-                <button onClick={reset} className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700">
-                  Reset
-                </button>
-              </div>
+          <div>
+            {/* Gambar Header Konsultasi */}
+            <div className="mb-4 text-center">
+              <img src="/bg-psytech.jpg" alt="Konsultasi" className="mx-auto w-64 rounded mb-3"/>
+              <h1 className="text-2xl font-bold mb-2">Aplikasi Pakar — Diagnosa Masalah Psikologis Anda!</h1>
+              <p className="text-sm text-gray-300">Pilih gejala yang sesuai dan klik Diagnosa untuk melihat hasil.</p>
             </div>
 
-            {/* RIGHT: Hasil */}
-            <div className="p-6 rounded-xl bg-gray-800/80 shadow-md max-h-[600px] overflow-auto">
-              <h2 className="text-xl font-semibold mb-4">Hasil Diagnosis</h2>
-              {!result && <p>Pilih gejala dan klik Diagnosa.</p>}
-              {result && (
-                <>
-                  <div className="mb-3">
-                    <strong>Fakta Akhir:</strong>
-                    <ul className="list-disc pl-5">
-                      {result.facts.map((f, i) => <li key={i}>{symptomMap[f] || f}</li>)}
-                    </ul>
-                  </div>
-                  <div className="mb-3">
-                    <strong>Diagnosa + Confidence:</strong>
-                    <ul className="list-disc pl-5">
-                      {result.diagnoses.length === 0 ? (
-                        <li>Tidak ada diagnosa yang cocok.</li>
-                      ) : (
-                        result.diagnoses.map((d, i) => (
-                          <li key={i}>{d.diagnosisText} — CF: {Math.round(d.confidence*100)}%</li>
-                        ))
-                      )}
-                    </ul>
-                  </div>
-                  <div>
-                    <strong>Trace:</strong>
-                    <div className="text-xs max-h-36 overflow-auto bg-gray-700/40 p-2 rounded mt-1">
-                      {result.trace.map((t,i) => (
-                        <div key={i} className="mb-2">
-                          <div>Rule: {t.ruleId} — Fired: {t.fired ? "Ya" : "Tidak"}</div>
-                          <div>Matched: {t.matched.join(", ") || "-"}</div>
-                          {t.conclusion && <div>Then: {t.conclusion.text} — CF: {t.confidence*100}%</div>}
-                        </div>
-                      ))}
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* LEFT: Konsultasi */}
+              <div className="p-6 rounded-xl bg-gray-800/80 shadow-md">
+                <h2 className="text-xl font-semibold mb-4">Pilih Gejala</h2>
+                <div className="space-y-2 max-h-64 overflow-auto pr-2">
+                  {kb.symptoms.map((s) => (
+                    <label key={s.id} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={selectedSymptoms.includes(s.id)}
+                        onChange={() => toggleSymptom(s.id)}
+                        className="accent-yellow-400"
+                      />
+                      <span>{s.text}</span>
+                    </label>
+                  ))}
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <button onClick={runInference} className="px-4 py-2 bg-yellow-500 rounded text-black hover:bg-yellow-600 transition">
+                    Diagnosa
+                  </button>
+                  <button onClick={reset} className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700">
+                    Reset
+                  </button>
+                </div>
+              </div>
+
+              {/* RIGHT: Hasil */}
+              <div className="p-6 rounded-xl bg-gray-800/80 shadow-md max-h-[600px] overflow-auto">
+                <h2 className="text-xl font-semibold mb-4">Hasil Diagnosis</h2>
+                {!result && <p>Pilih gejala dan klik Diagnosa.</p>}
+                {result && (
+                  <>
+                    <div className="mb-3">
+                      <strong>Fakta Akhir:</strong>
+                      <ul className="list-disc pl-5">
+                        {result.facts.map((f, i) => <li key={i}>{symptomMap[f] || f}</li>)}
+                      </ul>
                     </div>
-                  </div>
-                </>
-              )}
+                    <div className="mb-3">
+                      <strong>Diagnosa + Confidence:</strong>
+                      <ul className="list-disc pl-5">
+                        {result.diagnoses.length === 0 ? (
+                          <li>Tidak ada diagnosa yang cocok.</li>
+                        ) : (
+                          result.diagnoses.map((d, i) => (
+                            <li key={i}>{d.diagnosisText} — CF: {Math.round(d.confidence*100)}%</li>
+                          ))
+                        )}
+                      </ul>
+                    </div>
+                    <div>
+                      <strong>Trace:</strong>
+                      <div className="text-xs max-h-36 overflow-auto bg-gray-700/40 p-2 rounded mt-1">
+                        {result.trace.map((t,i) => (
+                          <div key={i} className="mb-2">
+                            <div>Rule: {t.ruleId} — Fired: {t.fired ? "Ya" : "Tidak"}</div>
+                            <div>Matched: {t.matched.join(", ") || "-"}</div>
+                            {t.conclusion && <div>Then: {t.conclusion.text} — CF: {t.confidence*100}%</div>}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         )}
