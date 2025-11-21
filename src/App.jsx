@@ -69,6 +69,8 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [page, setPage] = useState("dashboard");
 
+  const [newSymptomText, setNewSymptomText] = useState("");
+
   function toggleSymptom(id) {
     setSelectedSymptoms((s) =>
       s.includes(id) ? s.filter((x) => x !== id) : [...s, id]
@@ -84,6 +86,16 @@ export default function App() {
   function reset() {
     setSelectedSymptoms([]);
     setResult(null);
+  }
+
+  function addSymptom(e) {
+    e.preventDefault();
+    if (!newSymptomText.trim()) return alert("Masukkan teks gejala.");
+    const id = "s" + (kb.symptoms.length + 1 + Math.floor(Math.random() * 1000));
+    const newSym = { id, text: newSymptomText.trim() };
+    setKb((k) => ({ ...k, symptoms: [...k.symptoms, newSym] }));
+    setNewSymptomText("");
+    alert("Gejala berhasil ditambahkan (disimpan sementara).");
   }
 
   const symptomMap = {};
@@ -102,8 +114,9 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
           <div className="text-xl font-bold tracking-wide">PsyTech</div>
           <div className="flex space-x-6 text-sm">
-            <button onClick={() => setPage("dashboard")} className="hover:text-yellow-400 transition">Dashboard</button>
+            <button onClick={() => setPage("dashboard")} className="hover:text-yellow-400 transition">Dashboar</button>
             <button onClick={() => setPage("konsultasi")} className="hover:text-yellow-400 transition">Konsultasi</button>
+            <button onClick={() => setPage("tambah-gejala")} className="hover:text-yellow-400 transition">Tambah Gejala</button>
           </div>
         </div>
       </header>
@@ -112,9 +125,9 @@ export default function App() {
         {/* Dashboard Page */}
         {page === "dashboard" && (
           <section>
-            <h1 className="text-4xl font-bold mb-4 text-yellow-300">Dashboard</h1>
+            <h1 className="text-4xl font-bold mb-4 text-yellow-300">Aplikasi Pakar</h1>
             <p className="mb-4 text-gray-300">
-              Aplikasi Pakar — Diagnosa Masalah Psikologis Anda!
+             Selamat Datang — Diagnosa Masalah Psikologis Anda!
             </p>
 
             {/* Penjelasan Masalah Psikologis */}
@@ -130,28 +143,19 @@ export default function App() {
                 <li>Gangguan tidur: sulit tidur, sering terbangun, atau tidur berlebihan.</li>
                 <li>Kesulitan sosial: merasa takut atau canggung dalam berinteraksi dengan orang lain.</li>
               </ul>
-              <p>
-                Jika masalah psikologis tidak ditangani, dapat memengaruhi kesehatan fisik, produktivitas, dan kualitas hidup seseorang. Penanganannya bisa melalui konseling, terapi, perubahan gaya hidup, atau, dalam kasus tertentu, pengobatan.
-              </p>
             </div>
 
             {/* Penjelasan tentang aplikasi PsyTech */}
             <div className="mb-6 p-4 bg-gray-900/50 rounded border border-gray-700">
               <h2 className="text-2xl font-semibold mb-2 text-yellow-400">Tentang Aplikasi PsyTech</h2>
               <p>
-                PsyTech adalah aplikasi sistem pakar yang membantu pengguna mendiagnosa masalah psikologis berdasarkan gejala yang dialami. Aplikasi ini menggunakan metode **forward chaining** untuk mengolah data gejala dan menghasilkan diagnosa dengan tingkat keyakinan tertentu. 
-              </p>
-              <p>
-                Dengan PsyTech, pengguna dapat:
+                PsyTech adalah aplikasi sistem pakar yang membantu pengguna mendiagnosa masalah psikologis berdasarkan gejala yang dialami. Aplikasi ini menggunakan metode forward chaining untuk mengolah data gejala dan menghasilkan diagnosa dengan tingkat keyakinan tertentu. 
               </p>
               <ul className="list-disc pl-5 mb-2">
                 <li>Memahami jenis masalah psikologis yang mungkin dialami.</li>
                 <li>Mendapatkan gambaran awal mengenai gejala dan diagnosa yang sesuai.</li>
                 <li>Mendukung langkah selanjutnya, seperti konsultasi dengan psikolog profesional.</li>
               </ul>
-              <p>
-                Aplikasi ini dirancang untuk membantu meningkatkan kesadaran dan pemahaman terhadap kesehatan mental secara mudah dan cepat.
-              </p>
             </div>
           </section>
         )}
@@ -249,6 +253,26 @@ export default function App() {
                 )}
               </div>
             </div>
+          </section>
+        )}
+
+        {/* Tambah Gejala Page */}
+        {page === "tambah-gejala" && (
+          <section>
+            <h2 className="text-3xl font-bold mb-4 text-yellow-300">Tambah Gejala Baru</h2>
+            <form onSubmit={addSymptom} className="p-6 bg-gray-900/50 rounded border border-gray-700 max-w-md">
+              <label className="block mb-2">Nama Gejala:</label>
+              <input
+                type="text"
+                value={newSymptomText}
+                onChange={(e) => setNewSymptomText(e.target.value)}
+                placeholder="Masukkan gejala baru"
+                className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 mb-4"
+              />
+              <button className="px-4 py-2 bg-yellow-400 rounded text-black hover:bg-yellow-500 transition">
+                Tambah Gejala
+              </button>
+            </form>
           </section>
         )}
       </main>
