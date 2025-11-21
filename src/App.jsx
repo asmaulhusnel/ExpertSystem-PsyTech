@@ -177,7 +177,8 @@ export default function App() {
             <div className="mb-6 p-4 bg-gray-900/50 rounded border border-gray-700">
               <h2 className="text-2xl font-semibold mb-2 text-yellow-400">Tentang PsyTech</h2>
               <p>
-                PsyTech adalah sistem pakar untuk mendiagnosa masalah psikologis berdasarkan gejala. Menggunakan metode forward chaining untuk menghasilkan diagnosa dan CF.
+                PsyTech adalah aplikasi sistem pakar berbasis web yang bertujuan untuk membantu pengguna menilai kondisi psikologis melalui serangkaian pertanyaan. Aplikasi ini dirancang khusus untuk mahasiswa namun tetap dapat digunakan oleh masyarakat umum. Aplikasi ini memberikan analisis kondisi psikologis dan rekomendasi berdasarkan jawaban pengguna.
+                 Menggunakan metode forward chaining untuk menghasilkan diagnosa dan CF.
               </p>
             </div>
           </section>
