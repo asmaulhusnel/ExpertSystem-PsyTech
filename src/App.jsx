@@ -74,6 +74,9 @@ export default function App() {
   const [newRuleConclusionText, setNewRuleConclusionText] = useState("");
   const [newRuleConfidence, setNewRuleConfidence] = useState(0.7);
 
+  // State modal bantuan
+  const [helpOpen, setHelpOpen] = useState(false);
+
   function toggleSymptom(id) {
     setSelectedSymptoms((s) =>
       s.includes(id) ? s.filter((x) => x !== id) : [...s, id]
@@ -146,9 +149,32 @@ export default function App() {
             <button onClick={() => setPage("dashboard")} className="hover:text-yellow-400 transition">Dashboard</button>
             <button onClick={() => setPage("konsultasi")} className="hover:text-yellow-400 transition">Konsultasi</button>
             <button onClick={() => setPage("knowledge-base")} className="hover:text-yellow-400 transition">Knowledge Base</button>
+            <button onClick={() => setHelpOpen(true)} className="hover:text-yellow-400 transition">Bantuan</button>
           </div>
         </div>
       </header>
+
+      {/* Modal Bantuan */}
+      {helpOpen && (
+        <div className="fixed inset-0 bg-black/70 flex justify-center items-center z-50">
+          <div className="bg-gray-900 rounded-xl p-6 max-w-md w-full text-white relative">
+            <button
+              onClick={() => setHelpOpen(false)}
+              className="absolute top-2 right-2 text-gray-400 hover:text-yellow-400"
+            >
+              ✕
+            </button>
+            <h2 className="text-2xl font-bold mb-4 text-yellow-400">Bantuan & Kontak</h2>
+            <p className="mb-2">Pengembang: <strong>Asmaul Husnah Nasrullah</strong></p>
+            <p className="mb-2">Email: <a href="mailto:Asmaul.husnah@unm.ac.id" className="text-yellow-300 underline">Asmaul.husnah@unm.ac.id</a></p>
+            <p className="mb-2">Kontak: 0821-9353-3471</p>
+            <p className="mt-4">
+              Jika Anda ingin mengembangkan aplikasi ini menggunakan metode inferensi lain, 
+              silakan menghubungi kontak di atas.
+            </p>
+          </div>
+        </div>
+      )}
 
       <main className="pt-24 max-w-6xl mx-auto px-6 relative z-10">
         {/* Dashboard */}
@@ -157,7 +183,7 @@ export default function App() {
             <h1 className="text-4xl font-bold mb-4 text-yellow-300">Aplikasi Pakar</h1>
             <p className="mb-4 text-gray-300">Selamat Datang — Diagnosa Masalah Psikologis Anda!</p>
 
-           {/* Penjelasan Masalah Psikologis */}
+            {/* Penjelasan Masalah Psikologis */}
             <div className="mb-6 p-4 bg-gray-900/50 rounded border border-gray-700">
               <h2 className="text-2xl font-semibold mb-2 text-yellow-400">Tentang Masalah Psikologis</h2>
               <p className="mb-2">
