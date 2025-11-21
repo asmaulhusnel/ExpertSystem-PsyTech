@@ -1,12 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import kbSource from "./data/knowledge.json";
 import bgImage from "./bg.jpg";
-import logoImage from "./logo.png"; // Tambahkan logo di folder project
+import logoImage from "./logo.png"; // logo bulat
 
 const clone = (v) => JSON.parse(JSON.stringify(v));
 
 function forwardChaining(initialFacts, rules) {
-  // ... forwardChaining sama seperti sebelumnya
+  const facts = new Set(initialFacts);
+  const inferred = new Set();
+  const trace = [];
+  const fired = new Set();
+
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const rule of rules) {
+      if (fired.has(rule.id)) continue;
+      const allMatch = rule.if.every((prem) => facts.has(prem));
+      if (allMatch) {
+        const conclusionId = rule.then.id;
+        if (!facts.has(conclusionId)) {
+          facts.add(conclusionId);
+          inferred.add(conclusionId);
+          changed = true;
+        }
+        fired.add(rule.id);
+        trace.push({
+          ruleId: rule.id,
+          fired: true,
+          matched: rule.if.slice(),
+          conclusion: rule.then,
+          confidence: rule.confidence ?? 1,
+        });
+      } else {
+        trace.push({
+          ruleId: rule.id,
+          fired: false,
+          matched: rule.if.filter((p) => facts.has(p)),
+          needed: rule.if.length,
+          confidence: rule.confidence ?? 0,
+        });
+      }
+    }
+  }
+
+  const diagnoses = [];
+  for (const rule of rules) {
+    if (fired.has(rule.id) && rule.then.id.startsWith("d_")) {
+      diagnoses.push({
+        ruleId: rule.id,
+        diagnosisId: rule.then.id,
+        diagnosisText: rule.then.text,
+        confidence: rule.confidence ?? 1,
+      });
+    }
+  }
+
+  return {
+    facts: Array.from(facts),
+    inferred: Array.from(inferred),
+    diagnoses,
+    trace,
+  };
 }
 
 export default function App() {
@@ -18,18 +73,12 @@ export default function App() {
   const [newRulePremises, setNewRulePremises] = useState([]);
   const [newRuleConclusionText, setNewRuleConclusionText] = useState("");
   const [newRuleConfidence, setNewRuleConfidence] = useState(0.7);
-  
-  // Modal bantuan
+
+  // modal bantuan
   const [helpOpen, setHelpOpen] = useState(false);
 
-  // Splash page
+  // splash page state
   const [showSplash, setShowSplash] = useState(true);
-
-  // otomatis hilang setelah 3 detik
-  useEffect(() => {
-    const timer = setTimeout(() => setShowSplash(false), 3000);
-    return () => clearTimeout(timer);
-  }, []);
 
   function toggleSymptom(id) {
     setSelectedSymptoms((s) =>
@@ -88,17 +137,17 @@ export default function App() {
   const symptomMap = {};
   kb.symptoms.forEach((s) => (symptomMap[s.id] = s.text));
 
-  // --- Render ---
+  // --- RENDER ---
   if (showSplash) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center bg-black text-white">
         <img src={logoImage} alt="Logo" className="w-32 h-32 rounded-full mb-4" />
         <h1 className="text-2xl font-bold text-yellow-300 mb-2">Diagnosa Masalah Psikologi</h1>
-        <p className="text-gray-300 text-center max-w-xs">
+        <p className="text-gray-300 text-center max-w-xs mb-6">
           Selamat datang di <strong>PsyTech</strong>, aplikasi pakar berbasis web untuk mendiagnosa kondisi psikologis menggunakan metode forward chaining.
         </p>
         <button
-          className="mt-6 px-6 py-2 bg-yellow-400 text-black rounded hover:bg-yellow-500 transition"
+          className="px-6 py-2 bg-yellow-400 text-black rounded hover:bg-yellow-500 transition"
           onClick={() => setShowSplash(false)}
         >
           Mulai
@@ -150,7 +199,7 @@ export default function App() {
       )}
 
       <main className="pt-24 max-w-6xl mx-auto px-6 relative z-10">
-        {/* ... semua konten dashboard, konsultasi, knowledge-base sama seperti sebelumnya ... */}
+        {/* Dashboard, Konsultasi, Knowledge Base sama seperti kode sebelumnya */}
       </main>
 
       <footer className="py-4 text-center text-gray-400 text-sm bg-black/80 border-t border-gray-700">
