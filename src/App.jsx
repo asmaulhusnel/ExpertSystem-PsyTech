@@ -1,150 +1,20 @@
 import React, { useState } from "react";
-import kbSource from "./data/knowledge.json";
 import bgImage from "./bg.jpg";
-import logoImage from "./logo.png"; // logo bulat
-
-const clone = (v) => JSON.parse(JSON.stringify(v));
-
-function forwardChaining(initialFacts, rules) {
-  const facts = new Set(initialFacts);
-  const inferred = new Set();
-  const trace = [];
-  const fired = new Set();
-
-  let changed = true;
-  while (changed) {
-    changed = false;
-    for (const rule of rules) {
-      if (fired.has(rule.id)) continue;
-      const allMatch = rule.if.every((prem) => facts.has(prem));
-      if (allMatch) {
-        const conclusionId = rule.then.id;
-        if (!facts.has(conclusionId)) {
-          facts.add(conclusionId);
-          inferred.add(conclusionId);
-          changed = true;
-        }
-        fired.add(rule.id);
-        trace.push({
-          ruleId: rule.id,
-          fired: true,
-          matched: rule.if.slice(),
-          conclusion: rule.then,
-          confidence: rule.confidence ?? 1,
-        });
-      } else {
-        trace.push({
-          ruleId: rule.id,
-          fired: false,
-          matched: rule.if.filter((p) => facts.has(p)),
-          needed: rule.if.length,
-          confidence: rule.confidence ?? 0,
-        });
-      }
-    }
-  }
-
-  const diagnoses = [];
-  for (const rule of rules) {
-    if (fired.has(rule.id) && rule.then.id.startsWith("d_")) {
-      diagnoses.push({
-        ruleId: rule.id,
-        diagnosisId: rule.then.id,
-        diagnosisText: rule.then.text,
-        confidence: rule.confidence ?? 1,
-      });
-    }
-  }
-
-  return {
-    facts: Array.from(facts),
-    inferred: Array.from(inferred),
-    diagnoses,
-    trace,
-  };
-}
+import logoImage from "./logo.png";
 
 export default function App() {
-  const [kb, setKb] = useState(() => clone(kbSource));
-  const [selectedSymptoms, setSelectedSymptoms] = useState([]);
-  const [result, setResult] = useState(null);
+  const [showSplash, setShowSplash] = useState(true);
   const [page, setPage] = useState("dashboard");
-  const [newSymptomText, setNewSymptomText] = useState("");
-  const [newRulePremises, setNewRulePremises] = useState([]);
-  const [newRuleConclusionText, setNewRuleConclusionText] = useState("");
-  const [newRuleConfidence, setNewRuleConfidence] = useState(0.7);
-
-  // modal bantuan
   const [helpOpen, setHelpOpen] = useState(false);
 
-  // splash page state
-  const [showSplash, setShowSplash] = useState(true);
-
-  function toggleSymptom(id) {
-    setSelectedSymptoms((s) =>
-      s.includes(id) ? s.filter((x) => x !== id) : [...s, id]
-    );
-  }
-
-  function runInference() {
-    const initialFacts = selectedSymptoms.slice();
-    const out = forwardChaining(initialFacts, kb.rules);
-    setResult(out);
-  }
-
-  function reset() {
-    setSelectedSymptoms([]);
-    setResult(null);
-  }
-
-  function addSymptom(e) {
-    e.preventDefault();
-    if (!newSymptomText.trim()) return alert("Masukkan teks gejala.");
-    const id = "s" + (kb.symptoms.length + 1 + Math.floor(Math.random() * 1000));
-    const newSym = { id, text: newSymptomText.trim() };
-    setKb((k) => ({ ...k, symptoms: [...k.symptoms, newSym] }));
-    setNewSymptomText("");
-    alert("Gejala berhasil ditambahkan (disimpan sementara).");
-  }
-
-  function toggleNewPremise(id) {
-    setNewRulePremises((p) =>
-      p.includes(id) ? p.filter((x) => x !== id) : [...p, id]
-    );
-  }
-
-  function addRule(e) {
-    e.preventDefault();
-    if (newRulePremises.length === 0)
-      return alert("Pilih minimal satu premis.");
-    if (!newRuleConclusionText.trim())
-      return alert("Masukkan teks kesimpulan / diagnosa.");
-    const rid = "r" + (kb.rules.length + 1 + Math.floor(Math.random() * 1000));
-    const diagId = "d_" + rid;
-    const rule = {
-      id: rid,
-      if: newRulePremises.slice(),
-      then: { id: diagId, text: newRuleConclusionText.trim() },
-      confidence: Number(newRuleConfidence) || 0.7,
-    };
-    setKb((k) => ({ ...k, rules: [...k.rules, rule] }));
-    setNewRulePremises([]);
-    setNewRuleConclusionText("");
-    setNewRuleConfidence(0.7);
-    alert("Rule berhasil ditambahkan (disimpan sementara).");
-  }
-
-  const symptomMap = {};
-  kb.symptoms.forEach((s) => (symptomMap[s.id] = s.text));
-
-  // --- RENDER ---
+  // --- Render Splash Page ---
   if (showSplash) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center bg-black text-white">
         <img src={logoImage} alt="Logo" className="w-32 h-32 rounded-full mb-4" />
         <h1 className="text-2xl font-bold text-yellow-300 mb-2">Diagnosa Masalah Psikologi</h1>
         <p className="text-gray-300 text-center max-w-xs mb-6">
-          Selamat datang di <strong>PsyTech</strong>, aplikasi pakar berbasis web untuk mendiagnosa kondisi psikologis menggunakan metode forward chaining.
+          Selamat datang di <strong>PsyTech</strong>, aplikasi pakar berbasis web untuk mendiagnosa kondisi psikologis.
         </p>
         <button
           className="px-6 py-2 bg-yellow-400 text-black rounded hover:bg-yellow-500 transition"
@@ -191,15 +61,32 @@ export default function App() {
             <p className="mb-2">Email: <a href="mailto:Asmaul.husnah@unm.ac.id" className="text-yellow-300 underline">Asmaul.husnah@unm.ac.id</a></p>
             <p className="mb-2">Kontak: 0821-9353-3471</p>
             <p className="mt-4">
-              Jika Anda ingin mengembangkan aplikasi ini menggunakan metode inferensi lain, 
-              silakan menghubungi kontak di atas.
+              Jika Anda ingin mengembangkan aplikasi ini menggunakan metode inferensi lain, silakan menghubungi kontak di atas.
             </p>
           </div>
         </div>
       )}
 
+      {/* Main Content */}
       <main className="pt-24 max-w-6xl mx-auto px-6 relative z-10">
-        {/* Dashboard, Konsultasi, Knowledge Base sama seperti kode sebelumnya */}
+        {page === "dashboard" && (
+          <div className="text-white">
+            <h1 className="text-4xl font-bold text-yellow-300 mb-4">Dashboard</h1>
+            <p className="text-gray-300">Ini adalah halaman Dashboard sementara.</p>
+          </div>
+        )}
+        {page === "konsultasi" && (
+          <div className="text-white">
+            <h1 className="text-4xl font-bold text-yellow-300 mb-4">Konsultasi</h1>
+            <p className="text-gray-300">Ini adalah halaman Konsultasi sementara.</p>
+          </div>
+        )}
+        {page === "knowledge-base" && (
+          <div className="text-white">
+            <h1 className="text-4xl font-bold text-yellow-300 mb-4">Knowledge Base</h1>
+            <p className="text-gray-300">Ini adalah halaman Knowledge Base sementara.</p>
+          </div>
+        )}
       </main>
 
       <footer className="py-4 text-center text-gray-400 text-sm bg-black/80 border-t border-gray-700">
