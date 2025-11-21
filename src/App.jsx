@@ -155,10 +155,10 @@ export default function App() {
           <section>
             <h1 className="text-4xl font-bold mb-4 text-yellow-300">Dashboard</h1>
             <p className="mb-4 text-gray-300">
-              Aplikasi Pakar — Enter Diagnosa Masalah Psikologis Anda!
+              Aplikasi Pakar — Diagnosa Masalah Psikologis Anda!
             </p>
             <img
-              src="./bg.jpg"
+              src="bg.jpg"
               alt="Sistem Pakar"
               className="w-full max-h-96 object-cover rounded-lg shadow-lg mb-6"
             />
