@@ -157,17 +157,21 @@ export default function App() {
             <h1 className="text-4xl font-bold mb-4 text-yellow-300">Aplikasi Pakar</h1>
             <p className="mb-4 text-gray-300">Selamat Datang — Diagnosa Masalah Psikologis Anda!</p>
 
+           {/* Penjelasan Masalah Psikologis */}
             <div className="mb-6 p-4 bg-gray-900/50 rounded border border-gray-700">
               <h2 className="text-2xl font-semibold mb-2 text-yellow-400">Tentang Masalah Psikologis</h2>
               <p className="mb-2">
-                Masalah psikologis adalah kondisi di mana seseorang mengalami gangguan pada kesehatan mental, emosional, atau perilakunya.
-              </p>
+                Masalah psikologis adalah kondisi di mana seseorang mengalami gangguan pada kesehatan mental, emosional, atau perilaku yang memengaruhi cara berpikir, merasakan, dan berinteraksi dengan orang lain. Masalah ini bisa muncul karena berbagai faktor, seperti tekanan hidup, konflik interpersonal, trauma, ketidakseimbangan kimiawi dalam otak, atau stres yang berkepanjangan.</p>
+              <p className="mb-2">Beberapa contoh masalah psikologis yang umum terjadi antara lain:</p>
               <ul className="list-disc pl-5 mb-2">
-                <li>Stres dan kecemasan</li>
-                <li>Depresi</li>
-                <li>Gangguan tidur</li>
-                <li>Kesulitan sosial</li>
+                <li>Stres dan kecemasan: perasaan tegang, cemas berlebihan, atau khawatir terus-menerus.</li>
+                <li>Depresi: perasaan sedih, putus asa, dan kehilangan minat terhadap aktivitas sehari-hari.</li>
+                <li>Gangguan tidur: sulit tidur, sering terbangun, atau tidur berlebihan.</li>
+                <li>Kesulitan sosial: merasa takut atau canggung dalam berinteraksi dengan orang lain.</li>
               </ul>
+              <p>
+                Jika masalah psikologis tidak ditangani, dapat memengaruhi kesehatan fisik, produktivitas, dan kualitas hidup seseorang. Penanganannya bisa melalui konseling, terapi, perubahan gaya hidup, atau, dalam kasus tertentu, pengobatan.
+              </p>
             </div>
 
             <div className="mb-6 p-4 bg-gray-900/50 rounded border border-gray-700">
