@@ -157,23 +157,6 @@ export default function App() {
             <p className="mb-4 text-gray-300">
               Aplikasi Pakar — Diagnosa Masalah Psikologis Anda!
             </p>
-            <img
-              src="./bg.jpg"
-              alt="Sistem Pakar"
-              className="w-full max-h-96 object-cover rounded-lg shadow-lg mb-6"
-            />
-            <p className="text-gray-400" align="center">
-              Sistem pakar ini membantu mendiagnosa masalah psikologis berdasarkan gejala yang dialami. Masalah psikologis bisa berupa stres, kecemasan, depresi, gangguan tidur, dan kesulitan sosial.
-            </p>
-          </section>
-        )}
-
-        {/* Konsultasi Page */}
-        {page === "konsultasi" && (
-          <section id="konsultasi">
-            <h2 className="text-3xl font-bold mb-4 text-yellow-300">
-              Konsultasi Masalah Psikologis
-            </h2>
             {/* Penjelasan Masalah Psikologis */}
             <div className="mb-6 p-4 bg-gray-900/50 rounded border border-gray-700">
               <p className="mb-2">
@@ -190,7 +173,15 @@ export default function App() {
                 Jika masalah psikologis tidak ditangani, dapat memengaruhi kesehatan fisik, produktivitas, dan kualitas hidup seseorang. Penanganannya bisa melalui konseling, terapi, perubahan gaya hidup, atau, dalam kasus tertentu, pengobatan.
               </p>
             </div>
+          </section>
+        )}
 
+        {/* Konsultasi Page */}
+        {page === "konsultasi" && (
+          <section id="konsultasi">
+            <h2 className="text-3xl font-bold mb-4 text-yellow-300">
+              Konsultasi Masalah Psikologis
+            </h2>
             <p className="mb-4 text-yellow-400">
               Petunjuk: Pilih gejala yang sesuai dengan kondisi Anda, kemudian tekan tombol Diagnosa untuk melihat hasil.
             </p>
