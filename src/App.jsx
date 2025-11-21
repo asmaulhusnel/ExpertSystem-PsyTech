@@ -272,64 +272,7 @@ export default function App() {
           </section>
         )}
 
-        {/* Add Symptom & Rule Section */}
-        <section className="mt-12 mb-12 p-6 bg-gray-900/60 rounded-lg border border-gray-700 shadow-lg">
-          <h2 className="text-2xl font-bold mb-4 text-yellow-300">Tambah Gejala & Rule Baru</h2>
-
-          {/* Add Symptom */}
-          <div className="mb-4">
-            <form onSubmit={addSymptom} className="flex gap-2">
-              <input
-                value={newSymptomText}
-                onChange={(e) => setNewSymptomText(e.target.value)}
-                placeholder="Gejala baru"
-                className="flex-1 p-2 rounded bg-gray-800 text-white border border-gray-600"
-              />
-              <button className="px-4 py-2 bg-yellow-400 rounded text-black hover:bg-yellow-500 transition">
-                Tambah Gejala
-              </button>
-            </form>
-          </div>
-
-          {/* Add Rule */}
-          <div>
-            <form onSubmit={addRule} className="space-y-2">
-              <div className="flex flex-wrap gap-2 mb-2">
-                {kb.symptoms.map((s) => (
-                  <label key={s.id} className="flex items-center space-x-1 bg-gray-700/60 px-2 py-1 rounded cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={newRulePremises.includes(s.id)}
-                      onChange={() => toggleNewPremise(s.id)}
-                      className="accent-yellow-400"
-                    />
-                    <span className="text-sm">{s.text}</span>
-                  </label>
-                ))}
-              </div>
-              <input
-                value={newRuleConclusionText}
-                onChange={(e) => setNewRuleConclusionText(e.target.value)}
-                placeholder="Kesimpulan / Diagnosis"
-                className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-              />
-              <div className="flex items-center gap-2 mt-1">
-                <label>Confidence:</label>
-                <input
-                  type="number"
-                  step="0.05"
-                  min="0.1"
-                  max="1"
-                  value={newRuleConfidence}
-                  onChange={(e) => setNewRuleConfidence(e.target.value)}
-                  className="p-1 rounded w-24 bg-gray-800 text-white border border-gray-600"
-                />
-                <button className="ml-auto px-3 py-1 bg-yellow-400 rounded text-black hover:bg-yellow-500 transition">
-                  Tambah Rule
-                </button>
-              </div>
-            </form>
-          </div>
+       
         </section>
       </main>
 
