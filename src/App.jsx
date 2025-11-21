@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import kbSource from "./data/knowledge.json";
-import bgImage from "./bg.jpg"; // impor gambar dari folder src
+import bgImage from "./bg.jpg";
 
 const clone = (v) => JSON.parse(JSON.stringify(v));
 
@@ -91,7 +91,6 @@ export default function App() {
     setResult(null);
   }
 
-  // Tambah Gejala
   function addSymptom(e) {
     e.preventDefault();
     if (!newSymptomText.trim()) return alert("Masukkan teks gejala.");
@@ -102,14 +101,12 @@ export default function App() {
     alert("Gejala berhasil ditambahkan (disimpan sementara).");
   }
 
-  // Toggle premis untuk rule baru
   function toggleNewPremise(id) {
     setNewRulePremises((p) =>
       p.includes(id) ? p.filter((x) => x !== id) : [...p, id]
     );
   }
 
-  // Tambah Rule
   function addRule(e) {
     e.preventDefault();
     if (newRulePremises.length === 0)
@@ -139,7 +136,6 @@ export default function App() {
       className="min-h-screen relative bg-cover bg-center text-white"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      {/* Overlay */}
       <div className="absolute inset-0 bg-black/70 z-0"></div>
 
       {/* Navbar */}
@@ -155,21 +151,17 @@ export default function App() {
       </header>
 
       <main className="pt-24 max-w-6xl mx-auto px-6 relative z-10">
-        {/* Dashboard Page */}
+        {/* Dashboard */}
         {page === "dashboard" && (
           <section>
             <h1 className="text-4xl font-bold mb-4 text-yellow-300">Aplikasi Pakar</h1>
-            <p className="mb-4 text-gray-300">
-              Selamat Datang — Diagnosa Masalah Psikologis Anda!
-            </p>
+            <p className="mb-4 text-gray-300">Selamat Datang — Diagnosa Masalah Psikologis Anda!</p>
 
-            {/* Penjelasan Masalah Psikologis */}
             <div className="mb-6 p-4 bg-gray-900/50 rounded border border-gray-700">
               <h2 className="text-2xl font-semibold mb-2 text-yellow-400">Tentang Masalah Psikologis</h2>
               <p className="mb-2">
-                Masalah psikologis adalah kondisi di mana seseorang mengalami gangguan pada kesehatan mental, emosional, atau perilakunya, sehingga memengaruhi cara berpikir, merasakan, dan berinteraksi dengan orang lain.
+                Masalah psikologis adalah kondisi di mana seseorang mengalami gangguan pada kesehatan mental, emosional, atau perilakunya.
               </p>
-              <p className="mb-2">Beberapa contoh masalah psikologis yang umum terjadi antara lain:</p>
               <ul className="list-disc pl-5 mb-2">
                 <li>Stres dan kecemasan</li>
                 <li>Depresi</li>
@@ -178,22 +170,16 @@ export default function App() {
               </ul>
             </div>
 
-            {/* Penjelasan PsyTech */}
             <div className="mb-6 p-4 bg-gray-900/50 rounded border border-gray-700">
-              <h2 className="text-2xl font-semibold mb-2 text-yellow-400">Tentang Aplikasi PsyTech</h2>
+              <h2 className="text-2xl font-semibold mb-2 text-yellow-400">Tentang PsyTech</h2>
               <p>
-                PsyTech adalah sistem pakar untuk mendiagnosa masalah psikologis berdasarkan gejala yang dialami. Menggunakan metode forward chaining untuk menghasilkan diagnosa dan confidence factor (CF).
+                PsyTech adalah sistem pakar untuk mendiagnosa masalah psikologis berdasarkan gejala. Menggunakan metode forward chaining untuk menghasilkan diagnosa dan CF.
               </p>
-              <ul className="list-disc pl-5 mb-2">
-                <li>Memahami jenis masalah psikologis yang dialami</li>
-                <li>Mendapatkan diagnosa awal berdasarkan gejala</li>
-                <li>Mendukung konsultasi lebih lanjut dengan profesional</li>
-              </ul>
             </div>
           </section>
         )}
 
-        {/* Konsultasi Page */}
+        {/* Konsultasi */}
         {page === "konsultasi" && (
           <section>
             <h2 className="text-3xl font-bold mb-4 text-yellow-300">Konsultasi Masalah Psikologis</h2>
@@ -221,7 +207,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Hasil Diagnosis */}
+              {/* Hasil */}
               <div className="p-6 rounded-2xl bg-gray-800/70 border border-gray-700 shadow-lg max-h-[600px] overflow-auto">
                 <h3 className="text-xl font-semibold mb-4">Hasil Diagnosis</h3>
                 {!result && <p>Pilih gejala dan klik Diagnosa.</p>}
@@ -246,68 +232,70 @@ export default function App() {
           </section>
         )}
 
-        {/* Knowledge Base Page */}
+        {/* Knowledge Base */}
         {page === "knowledge-base" && (
           <section>
             <h2 className="text-3xl font-bold mb-4 text-yellow-300">Knowledge Base</h2>
 
-            {/* Tambah Gejala */}
-            <form onSubmit={addSymptom} className="p-6 bg-gray-900/50 rounded border border-gray-700 max-w-md mb-6">
-              <h3 className="text-xl font-semibold mb-2">Tambah Gejala</h3>
-              <input
-                type="text"
-                value={newSymptomText}
-                onChange={(e) => setNewSymptomText(e.target.value)}
-                placeholder="Masukkan gejala baru"
-                className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 mb-2"
-              />
-              <button className="px-4 py-2 bg-yellow-400 rounded text-black hover:bg-yellow-500 transition">Tambah Gejala</button>
-            </form>
-
-            {/* Tambah Rule */}
-            <form onSubmit={addRule} className="p-6 bg-gray-900/50 rounded border border-gray-700 max-w-md mb-6">
-              <h3 className="text-xl font-semibold mb-2">Tambah Rule</h3>
-              <p className="mb-2">Pilih premis (gejala):</p>
-              <div className="flex flex-wrap gap-2 mb-2">
-                {kb.symptoms.map((s) => (
-                  <label key={s.id} className="flex items-center space-x-1 bg-gray-700/60 px-2 py-1 rounded cursor-pointer">
-                    <input type="checkbox" checked={newRulePremises.includes(s.id)} onChange={() => toggleNewPremise(s.id)} className="accent-yellow-400" />
-                    <span className="text-sm">{s.text}</span>
-                  </label>
-                ))}
-              </div>
-              <input
-                type="text"
-                value={newRuleConclusionText}
-                onChange={(e) => setNewRuleConclusionText(e.target.value)}
-                placeholder="Masukkan diagnosa"
-                className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 mb-2"
-              />
-              <div className="flex items-center gap-2 mb-2">
-                <label>Confidence:</label>
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Tambah Gejala */}
+              <form onSubmit={addSymptom} className="p-6 bg-gray-900/50 rounded border border-gray-700">
+                <h3 className="text-xl font-semibold mb-2">Tambah Gejala</h3>
                 <input
-                  type="number"
-                  step="0.05"
-                  min="0.1"
-                  max="1"
-                  value={newRuleConfidence}
-                  onChange={(e) => setNewRuleConfidence(e.target.value)}
-                  className="p-1 rounded w-24 bg-gray-800 text-white border border-gray-600"
+                  type="text"
+                  value={newSymptomText}
+                  onChange={(e) => setNewSymptomText(e.target.value)}
+                  placeholder="Masukkan gejala baru"
+                  className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 mb-2"
                 />
-              </div>
-              <button className="px-4 py-2 bg-yellow-400 rounded text-black hover:bg-yellow-500 transition">Tambah Rule</button>
-            </form>
+                <button className="px-4 py-2 bg-yellow-400 rounded text-black hover:bg-yellow-500 transition">Tambah Gejala</button>
+              </form>
 
-            {/* Tampilkan Semua Gejala */}
-            <div className="p-6 bg-gray-900/50 rounded border border-gray-700 mb-6">
+              {/* Tambah Rule */}
+              <form onSubmit={addRule} className="p-6 bg-gray-900/50 rounded border border-gray-700">
+                <h3 className="text-xl font-semibold mb-2">Tambah Rule</h3>
+                <p className="mb-2">Pilih premis (gejala):</p>
+                <div className="flex flex-wrap gap-2 mb-2 max-h-48 overflow-auto pr-1">
+                  {kb.symptoms.map((s) => (
+                    <label key={s.id} className="flex items-center space-x-1 bg-gray-700/60 px-2 py-1 rounded cursor-pointer">
+                      <input type="checkbox" checked={newRulePremises.includes(s.id)} onChange={() => toggleNewPremise(s.id)} className="accent-yellow-400" />
+                      <span className="text-sm">{s.text}</span>
+                    </label>
+                  ))}
+                </div>
+                <input
+                  type="text"
+                  value={newRuleConclusionText}
+                  onChange={(e) => setNewRuleConclusionText(e.target.value)}
+                  placeholder="Masukkan diagnosa"
+                  className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 mb-2"
+                />
+                <div className="flex items-center gap-2 mb-2">
+                  <label>Confidence:</label>
+                  <input
+                    type="number"
+                    step="0.05"
+                    min="0.1"
+                    max="1"
+                    value={newRuleConfidence}
+                    onChange={(e) => setNewRuleConfidence(e.target.value)}
+                    className="p-1 rounded w-24 bg-gray-800 text-white border border-gray-600"
+                  />
+                </div>
+                <button className="px-4 py-2 bg-yellow-400 rounded text-black hover:bg-yellow-500 transition">Tambah Rule</button>
+              </form>
+            </div>
+
+            {/* Daftar Gejala */}
+            <div className="mt-6 p-6 bg-gray-900/50 rounded border border-gray-700">
               <h3 className="text-xl font-semibold mb-2">Daftar Gejala</h3>
               <ul className="list-disc pl-5">
                 {kb.symptoms.map((s) => (<li key={s.id}>{s.text}</li>))}
               </ul>
             </div>
 
-            {/* Tampilkan Semua Rule */}
-            <div className="p-6 bg-gray-900/50 rounded border border-gray-700 mb-6">
+            {/* Daftar Rule */}
+            <div className="mt-6 p-6 bg-gray-900/50 rounded border border-gray-700">
               <h3 className="text-xl font-semibold mb-2">Daftar Rule</h3>
               <ul className="list-disc pl-5">
                 {kb.rules.map((r) => (
