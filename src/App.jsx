@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import kbSource from "./data/knowledge.json";
+import bgImage from "./bg.jpg"; // impor gambar dari folder src
 
 const clone = (v) => JSON.parse(JSON.stringify(v));
 
@@ -68,11 +69,6 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [page, setPage] = useState("dashboard");
 
-  const [newSymptomText, setNewSymptomText] = useState("");
-  const [newRulePremises, setNewRulePremises] = useState([]);
-  const [newRuleConclusionText, setNewRuleConclusionText] = useState("");
-  const [newRuleConfidence, setNewRuleConfidence] = useState(0.7);
-
   function toggleSymptom(id) {
     setSelectedSymptoms((s) =>
       s.includes(id) ? s.filter((x) => x !== id) : [...s, id]
@@ -90,50 +86,13 @@ export default function App() {
     setResult(null);
   }
 
-  function addSymptom(e) {
-    e.preventDefault();
-    if (!newSymptomText.trim()) return alert("Masukkan teks gejala.");
-    const id = "s" + (kb.symptoms.length + 1 + Math.floor(Math.random() * 1000));
-    const newSym = { id, text: newSymptomText.trim() };
-    setKb((k) => ({ ...k, symptoms: [...k.symptoms, newSym] }));
-    setNewSymptomText("");
-    setSelectedSymptoms((s) => [...s, id]);
-  }
-
-  function addRule(e) {
-    e.preventDefault();
-    if (newRulePremises.length === 0)
-      return alert("Pilih minimal satu premis.");
-    if (!newRuleConclusionText.trim())
-      return alert("Masukkan teks kesimpulan.");
-    const rid = "r" + (kb.rules.length + 1 + Math.floor(Math.random() * 1000));
-    const diagId = "d_" + rid;
-    const rule = {
-      id: rid,
-      if: newRulePremises.slice(),
-      then: { id: diagId, text: newRuleConclusionText.trim() },
-      confidence: Number(newRuleConfidence) || 0.7,
-    };
-    setKb((k) => ({ ...k, rules: [...k.rules, rule] }));
-    setNewRulePremises([]);
-    setNewRuleConclusionText("");
-    setNewRuleConfidence(0.7);
-    alert("Rule ditambahkan (disimpan sementara).");
-  }
-
-  function toggleNewPremise(id) {
-    setNewRulePremises((p) =>
-      p.includes(id) ? p.filter((x) => x !== id) : [...p, id]
-    );
-  }
-
   const symptomMap = {};
   kb.symptoms.forEach((s) => (symptomMap[s.id] = s.text));
 
   return (
     <div
       className="min-h-screen relative bg-cover bg-center text-white"
-      style={{ backgroundImage: "url('./bg.jpg')" }}
+      style={{ backgroundImage: `url(${bgImage})` }}
     >
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/70 z-0"></div>
@@ -271,9 +230,6 @@ export default function App() {
             </div>
           </section>
         )}
-
-       
-        </section>
       </main>
 
       <footer className="py-4 text-center text-gray-400 text-sm bg-black/80 border-t border-gray-700">
