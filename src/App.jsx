@@ -158,11 +158,11 @@ export default function App() {
               Aplikasi Pakar — Diagnosa Masalah Psikologis Anda!
             </p>
             <img
-              src="bg.jpg"
+              src="./bg.jpg"
               alt="Sistem Pakar"
               className="w-full max-h-96 object-cover rounded-lg shadow-lg mb-6"
             />
-            <p className="text-gray-400">
+            <p className="text-gray-400" align="center">
               Sistem pakar ini membantu mendiagnosa masalah psikologis berdasarkan gejala yang dialami. Masalah psikologis bisa berupa stres, kecemasan, depresi, gangguan tidur, dan kesulitan sosial.
             </p>
           </section>
