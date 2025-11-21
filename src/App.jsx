@@ -116,8 +116,10 @@ export default function App() {
             <p className="mb-4 text-gray-300">
               Aplikasi Pakar — Diagnosa Masalah Psikologis Anda!
             </p>
+
             {/* Penjelasan Masalah Psikologis */}
             <div className="mb-6 p-4 bg-gray-900/50 rounded border border-gray-700">
+              <h2 className="text-2xl font-semibold mb-2 text-yellow-400">Tentang Masalah Psikologis</h2>
               <p className="mb-2">
                 Masalah psikologis adalah kondisi di mana seseorang mengalami gangguan pada kesehatan mental, emosional, atau perilakunya, sehingga memengaruhi cara berpikir, merasakan, dan berinteraksi dengan orang lain. Masalah ini bisa muncul karena berbagai faktor, seperti tekanan hidup, konflik interpersonal, trauma, atau ketidakseimbangan kimiawi dalam otak.
               </p>
@@ -130,6 +132,25 @@ export default function App() {
               </ul>
               <p>
                 Jika masalah psikologis tidak ditangani, dapat memengaruhi kesehatan fisik, produktivitas, dan kualitas hidup seseorang. Penanganannya bisa melalui konseling, terapi, perubahan gaya hidup, atau, dalam kasus tertentu, pengobatan.
+              </p>
+            </div>
+
+            {/* Penjelasan tentang aplikasi PsyTech */}
+            <div className="mb-6 p-4 bg-gray-900/50 rounded border border-gray-700">
+              <h2 className="text-2xl font-semibold mb-2 text-yellow-400">Tentang Aplikasi PsyTech</h2>
+              <p>
+                PsyTech adalah aplikasi sistem pakar yang membantu pengguna mendiagnosa masalah psikologis berdasarkan gejala yang dialami. Aplikasi ini menggunakan metode **forward chaining** untuk mengolah data gejala dan menghasilkan diagnosa dengan tingkat keyakinan tertentu. 
+              </p>
+              <p>
+                Dengan PsyTech, pengguna dapat:
+              </p>
+              <ul className="list-disc pl-5 mb-2">
+                <li>Memahami jenis masalah psikologis yang mungkin dialami.</li>
+                <li>Mendapatkan gambaran awal mengenai gejala dan diagnosa yang sesuai.</li>
+                <li>Mendukung langkah selanjutnya, seperti konsultasi dengan psikolog profesional.</li>
+              </ul>
+              <p>
+                Aplikasi ini dirancang untuk membantu meningkatkan kesadaran dan pemahaman terhadap kesehatan mental secara mudah dan cepat.
               </p>
             </div>
           </section>
